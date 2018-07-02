@@ -4,6 +4,7 @@
 const pm2 = require('pm2');
 const pmx = require('pmx');
 const MessageQueue = require('./message-queue');
+var fs = require('fs');
 
 
 /**
@@ -68,7 +69,23 @@ const slackUrlRouter = {
      */
     addMessage: function(message) {
         const processName = message.name;
-        const slackUrl = moduleConfig['slack_url-' + processName] || moduleConfig['slack_url'];
+        let  slackUrl = moduleConfig['slack_url-' + processName] || moduleConfig['slack_url'];;
+        console.warn(moduleConfig.slack_error_config_file)
+        if (fs.existsSync(moduleConfig.slack_error_config_file)) {
+            let obj = JSON.parse(fs.readFileSync(moduleConfig.slack_error_config_file, 'utf8'));
+            let n;
+            for (const item of obj.skip_errors) {
+                n = message.description.search(item);
+                if(n!==-1){
+                    break;
+                }
+            }
+            if(n!==-1){
+
+                slackUrl = moduleConfig['slack_url_skip-' + processName] || moduleConfig['slack_url_skip'];
+            }
+        }
+
 
         if (!slackUrl) {
             return;
@@ -85,6 +102,9 @@ const slackUrlRouter = {
                 // Use process based custom configuration values if exist, else use the global configuration values.
                 config[configPropertyName] = moduleConfig[configPropertyName + '-' + processName] || moduleConfig[configPropertyName];
             });
+
+            // Update slack url as per chosen hook
+            config['slack_url'] = slackUrl;
 
             this.messageQueues[slackUrl] = new MessageQueue(config);
         }
@@ -110,7 +130,7 @@ function parseProcessName(process) {
 // ----- APP INITIALIZATION -----
 
 // Start listening on the PM2 BUS
-pm2.launchBus(function(err, bus) {
+pm2.launchBus(function (err, bus) {
 
     // Listen for process logs
     if (moduleConfig.log) {
