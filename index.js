@@ -70,18 +70,21 @@ const slackUrlRouter = {
     addMessage: function(message) {
         const processName = message.name;
         let  slackUrl = moduleConfig['slack_url-' + processName] || moduleConfig['slack_url'];;
-        console.warn(moduleConfig.slack_error_config_file)
-        if (fs.existsSync(moduleConfig.slack_error_config_file)) {
-            let obj = JSON.parse(fs.readFileSync(moduleConfig.slack_error_config_file, 'utf8'));
+
+
+        //
+        if (fs.existsSync(moduleConfig.slack_skip_errors_file)) {
+            let obj = JSON.parse(fs.readFileSync(moduleConfig.slack_skip_errors_file, 'utf8'));
             let n;
+
             for (const item of obj.skip_errors) {
                 n = message.description.search(item);
                 if(n!==-1){
                     break;
                 }
             }
-            if(n!==-1){
 
+            if(n!==-1){
                 slackUrl = moduleConfig['slack_url_skip-' + processName] || moduleConfig['slack_url_skip'];
             }
         }

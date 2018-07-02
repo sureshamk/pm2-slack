@@ -52,6 +52,6 @@
     "queue_max": 100,
     "buffer_max_seconds": 20,
     "slack_skip_url":null,
-    "slack_error_config_file":null
+    "slack_skip_errors_file":null
   }
 }
