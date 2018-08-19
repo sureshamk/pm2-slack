@@ -98,6 +98,37 @@ pm2 set pm2-slack:slack_url-bar https://hooks.slack.com/services/123456789/12345
 pm2 set pm2-slack:servername-foo Bar-server
 # Note: The `pm2-slack:buffer_seconds`=5 will be used from global options for this process. 
 ```
+
+### Filter message and send to particular hook
+
+Some time need to filter message text and send to particular hook. By default pm2 logs only two type error or log. 
+Some time we need to filter warning message to be posted to some particular channel. This can be only by filtering text
+and passing to custom channel.
+
+###### Example
+
+Create a json file as follows.
+
+```json
+
+[
+  {
+    "hook": "https://hooks.slack.com/services/XXXXXXX/YYYYYYYYYYYYYY",
+    "text": "Error Happens"
+  },
+  {
+    "hook": "https://hooks.slack.com/services/XXXXXXX/zzzzzzzzzzzzzzzzzzz",
+    "text": "node-telegram-bot-api deprecated In the future, content-type of files you send will"
+  }
+]
+
+```
+
+```
+# Set config file as follows for pm2-slack.
+pm2 set pm2-slack:custom_hook_conf /home/suresh/custom_hooks.json
+
+```
   
 
 ## Contributing
