@@ -1,10 +1,10 @@
 [
   {
-    "hook": "https://hooks.slack.com/services/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",
+    "hook": "https://hooks.slack.com/services/XXXXXXX/YYYYYYYYYYYYYY",
     "text": "Error Happens"
   },
   {
-    "hook": "https://hooks.slack.com/services/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",
+    "hook": "https://hooks.slack.com/services/XXXXXXX/zzzzzzzzzzzzzzzzzzz",
     "text": "node-telegram-bot-api deprecated In the future, content-type of files you send will"
   }
 ]
