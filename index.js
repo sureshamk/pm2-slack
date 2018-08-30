@@ -70,12 +70,11 @@ const slackUrlRouter = {
     addMessage: function (message) {
         const processName = message.name;
         let slackUrl = moduleConfig['slack_url-' + processName] || moduleConfig['slack_url'];
-
+        let customHook=null;
         // Custom as per config
-        let error_channel_config = moduleConfig.error_channel_config;
+        let error_channel_config = moduleConfig.custom_hook_conf;
         if (message.description && (message.event === 'error' || message.event === 'log') && fs.existsSync(error_channel_config)) {
             let obj = JSON.parse(fs.readFileSync(error_channel_config, 'utf8'));
-
             let customHook = obj.find(function (item) {
                 if (message.description.search(item.text) !== -1) {
                     return item
@@ -83,9 +82,10 @@ const slackUrlRouter = {
                 return false;
             });
 
-            if (customHook) {
-                slackUrl = customHook.hook
+            if (customHook.hook) {
+                slackUrl = customHook.hook;
             }
+
         }
 
 
