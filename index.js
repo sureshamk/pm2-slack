@@ -81,8 +81,8 @@ const slackUrlRouter = {
                 }
                 return false;
             });
-
-            if (customHook.hook) {
+    console.log(customHook)
+            if (customHook&&customHook.hook) {
                 slackUrl = customHook.hook;
             }
 
